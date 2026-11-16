@@ -8,9 +8,9 @@ import { Projects } from "@/components/Projects";
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#090D16] text-slate-100">
+    <>
       <Navbar />
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <Hero />
         <About />
         <Certifications />
@@ -18,6 +18,6 @@ export default function HomePage() {
         <Contact />
       </main>
       <Footer />
-    </div>
+    </>
   );
 }

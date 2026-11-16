@@ -33,8 +33,11 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="py-14 sm:py-16">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+    <section
+      id="contact"
+      className="flex min-h-[100svh] items-center bg-[#090D16] py-20 lg:py-24"
+    >
+      <div className="wrap">
         <SectionHeader
           index="04"
           eyebrow="Direct Channels"
@@ -42,12 +45,12 @@ export function Contact() {
           description="Reach out for systems engineering, competitive robotics software, or edge AI infrastructure work."
         />
 
-        <div className="mb-6 flex flex-wrap items-center gap-3">
-          <div className="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-white/10 bg-[#0F172A] px-3.5 py-2 font-mono text-xs text-slate-200">
-            <MapPin className="h-3.5 w-3.5 text-cyan-400" aria-hidden="true" />
+        <div className="mb-8 flex flex-wrap items-center gap-3">
+          <div className="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-white/10 bg-[#0F172A] px-3.5 py-2 font-mono text-xs text-slate-100">
+            <MapPin className="h-4 w-4 text-cyan-400" aria-hidden="true" />
             <span>{PROFILE.location}</span>
           </div>
-          <div className="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 font-mono text-xs text-emerald-300">
+          <div className="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 font-mono text-xs text-emerald-200">
             <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
             <span>{PROFILE.availability}</span>
           </div>
@@ -63,7 +66,7 @@ export function Contact() {
                   className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-[#0F172A] p-4 transition-colors hover:border-cyan-500/30 hover:bg-[#1E293B]"
                 >
                   <div className="min-w-0">
-                    <p className="font-mono text-[11px] uppercase tracking-wider text-slate-400">
+                    <p className="font-mono text-[11px] uppercase tracking-wider text-slate-300">
                       {channel.label}
                     </p>
                     {channel.href ? (
@@ -75,15 +78,15 @@ export function Contact() {
                             ? "noopener noreferrer"
                             : undefined
                         }
-                        className="mt-1 inline-flex items-center gap-1.5 truncate font-mono text-sm font-medium text-slate-100 hover:text-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
+                        className="mt-1 inline-flex min-h-[44px] items-center gap-1.5 truncate font-mono text-sm font-medium text-slate-50 hover:text-cyan-400"
                       >
                         <span className="truncate">{channel.value}</span>
                         {channel.href.startsWith("http") ? (
-                          <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
+                          <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                         ) : null}
                       </a>
                     ) : (
-                      <p className="mt-1 truncate font-mono text-sm font-medium text-slate-100">
+                      <p className="mt-1 flex min-h-[44px] items-center truncate font-mono text-sm font-medium text-slate-50">
                         {channel.value}
                       </p>
                     )}
@@ -93,16 +96,16 @@ export function Contact() {
                     type="button"
                     onClick={() => void copyText(channel.copyValue, channel.id)}
                     aria-label={`Copy ${channel.label}`}
-                    className="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border border-white/10 bg-[#090D16] px-3 font-mono text-xs text-slate-300 transition-colors hover:border-emerald-500/30 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                    className="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border border-white/10 bg-[#090D16] px-3 font-mono text-xs text-slate-200 transition-colors hover:border-emerald-500/30 hover:text-emerald-300"
                   >
                     {isCopied ? (
-                      <span className="inline-flex items-center gap-1.5 text-emerald-400">
-                        <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span className="inline-flex items-center gap-1.5 text-emerald-300">
+                        <Check className="h-4 w-4" aria-hidden="true" />
                         <span>Copied</span>
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1.5">
-                        <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                        <Copy className="h-4 w-4" aria-hidden="true" />
                         <span>Copy</span>
                       </span>
                     )}
@@ -114,16 +117,32 @@ export function Contact() {
 
           <form
             onSubmit={handleSubmit}
-            className="rounded-lg border border-white/10 bg-[#0F172A] p-5 sm:p-6 lg:col-span-7"
+            className="rounded-lg border border-white/10 bg-[#0F172A] p-6 lg:col-span-7"
           >
             <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
               <h3 className="text-base font-semibold text-white">
                 Send a Direct Message
               </h3>
-              <span className="font-mono text-xs text-slate-400">
+              <span className="font-mono text-xs text-slate-300">
                 TLS / DIRECT_DISPATCH
               </span>
             </div>
+
+            <svg
+              viewBox="0 0 420 56"
+              data-visual="dispatch-channel"
+              className="mb-4 h-14 w-full rounded border border-white/10 bg-[#090D16] px-3"
+              aria-hidden="true"
+            >
+              <line x1="108" y1="28" x2="180" y2="28" stroke="#06b6d4" strokeWidth="1.5" strokeDasharray="4 3" />
+              <line x1="250" y1="28" x2="312" y2="28" stroke="#10b981" strokeWidth="1.5" />
+              <rect x="16" y="14" width="92" height="28" rx="4" fill="#0F172A" stroke="#334155" />
+              <text x="62" y="32" textAnchor="middle" fill="#cbd5e1" fontSize="10" fontFamily="monospace">CLIENT</text>
+              <rect x="180" y="14" width="70" height="28" rx="4" fill="#0F172A" stroke="#06b6d4" />
+              <text x="215" y="32" textAnchor="middle" fill="#f8fafc" fontSize="10" fontFamily="monospace">TLS 1.3</text>
+              <rect x="312" y="14" width="92" height="28" rx="4" fill="#0F172A" stroke="#10b981" />
+              <text x="358" y="32" textAnchor="middle" fill="#a7f3d0" fontSize="10" fontFamily="monospace">INBOX</text>
+            </svg>
 
             {submitted ? (
               <div
@@ -148,7 +167,7 @@ export function Contact() {
               <div>
                 <label
                   htmlFor="contact-name"
-                  className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-slate-300"
+                  className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-slate-200"
                 >
                   Name
                 </label>
@@ -162,14 +181,14 @@ export function Contact() {
                     setFormState((prev) => ({ ...prev, name: e.target.value }))
                   }
                   placeholder="Ada Lovelace"
-                  className="min-h-[44px] w-full rounded-md border border-white/10 bg-[#090D16] px-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
+                  className="min-h-[44px] w-full rounded-md border border-white/15 bg-[#090D16] px-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-cyan-500"
                 />
               </div>
 
               <div>
                 <label
                   htmlFor="contact-email"
-                  className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-slate-300"
+                  className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-slate-200"
                 >
                   Email
                 </label>
@@ -182,8 +201,8 @@ export function Contact() {
                   onChange={(e) =>
                     setFormState((prev) => ({ ...prev, email: e.target.value }))
                   }
-                  placeholder="ada@analytical.engine"
-                  className="min-h-[44px] w-full rounded-md border border-white/10 bg-[#090D16] px-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
+                  placeholder="ada@analytical.example"
+                  className="min-h-[44px] w-full rounded-md border border-white/15 bg-[#090D16] px-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-cyan-500"
                 />
               </div>
             </div>
@@ -191,7 +210,7 @@ export function Contact() {
             <div className="mt-4">
               <label
                 htmlFor="contact-message"
-                className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-slate-300"
+                className="mb-1.5 block font-mono text-xs uppercase tracking-wider text-slate-200"
               >
                 Message
               </label>
@@ -205,14 +224,14 @@ export function Contact() {
                   setFormState((prev) => ({ ...prev, message: e.target.value }))
                 }
                 placeholder="Project scope, systems requirements, or role details..."
-                className="w-full rounded-md border border-white/10 bg-[#090D16] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
+                className="w-full rounded-md border border-white/15 bg-[#090D16] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-400 focus:border-cyan-500"
               />
             </div>
 
             <div className="mt-5 flex justify-end">
               <button
                 type="submit"
-                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A] sm:w-auto"
+                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-all hover:-translate-y-0.5 hover:bg-cyan-400 active:translate-y-px sm:w-auto"
               >
                 <Send className="h-4 w-4" aria-hidden="true" />
                 <span>Transmit Message</span>

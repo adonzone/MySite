@@ -16,15 +16,20 @@ export const metadata: Metadata = {
   title: "Adonai Afewerki (@adonzone) — Systems, Robotics & Edge AI",
   description:
     "Personal engineering portfolio of Adonai Afewerki. Systems programming, competitive robotics software, Linux deployment, and edge AI infrastructure.",
+  other: {
+    "page-type": "software",
+    "site-kind": "software",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      data-type="software"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#090D16] text-slate-100 selection:bg-cyan-500/25">
+      <body className="min-h-full flex flex-col bg-[#090D16] text-slate-50 selection:bg-cyan-500/25">
         {children}
       </body>
     </html>
