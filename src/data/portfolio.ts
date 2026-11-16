@@ -4,7 +4,7 @@ export const PROFILE = {
   name: "Adonai Afewerki",
   handle: "adonzone",
   role: "Systems, Robotics & Edge AI Engineer",
-  email: "adonai@adonzone.dev",
+  email: "adonafom100@gmail.com",
   location: "North America · EST (UTC-5)",
   availability: "Available for Systems & Edge AI Roles",
   githubUrl: "https://github.com/adonzone",
@@ -55,21 +55,6 @@ export const SKILL_GROUPS: readonly SkillGroup[] = [
 
 export const PROJECTS: readonly ProjectItem[] = [
   {
-    id: "beastbots-robotics",
-    title: "2026-Rebuilt-Beastbots",
-    domain: "Competitive Robotics · Control Systems",
-    summary:
-      "Competition-grade robot codebase engineered for deterministic autonomous routines, subsystem state machines, and live field diagnostics.",
-    architecture: [
-      "Modular subsystem isolation with hardware-abstracted motor and sensor interfaces.",
-      "Telemetry logging pipeline for real-time PID tuning and brownout fault analysis.",
-      "Deterministic autonomous command scheduler validated under competition match constraints.",
-    ],
-    tags: ["Robotics", "Control Loops", "Telemetry", "Embedded"],
-    repoUrl: "https://github.com/adonzone/2026-Rebuilt-Beastbots",
-    status: "Production",
-  },
-  {
     id: "simple-git",
     title: "SimpleGit",
     domain: "Systems Programming · VCS Internals",
@@ -97,36 +82,6 @@ export const PROJECTS: readonly ProjectItem[] = [
     ],
     tags: ["Self-Hosted", "Linux", "Offline-First", "HTML/CSS"],
     repoUrl: "https://github.com/adonzone/kiwix-vault",
-    status: "Active",
-  },
-  {
-    id: "jarvis-assistant",
-    title: "jarvis",
-    domain: "Edge AI · Tool-Using Agent Runtime",
-    summary:
-      "Modular local assistant framework connecting LLM reasoning loops to system utilities, voice synthesis, and structured tool execution.",
-    architecture: [
-      "Pluggable tool-calling loop with strict input validation and deterministic fallback paths.",
-      "Integrates local speech output and system automation hooks for hands-free operation.",
-      "Designed for low-latency execution on workstation and edge GPU hardware.",
-    ],
-    tags: ["Edge AI", "Agents", "MCP", "Automation"],
-    repoUrl: "https://github.com/adonzone/jarvis",
-    status: "Active",
-  },
-  {
-    id: "gcvs-scanner",
-    title: "gcvs",
-    domain: "DevSecOps · Static Security",
-    summary:
-      "Automated repository virus and supply-chain scanning workflow integrating signature checks into GitHub pipelines.",
-    architecture: [
-      "Automated artifact and repository scan gates triggered on push and pull request events.",
-      "Zero-trust verification mindset aligned with CodeQL and supply-chain hardening.",
-      "Structured pass/fail reporting for rapid triage in CI.",
-    ],
-    tags: ["Security", "CI/CD", "GitHub", "Supply Chain"],
-    repoUrl: "https://github.com/adonzone/gcvs",
     status: "Active",
   },
   {
@@ -162,10 +117,11 @@ export const CONTACT_CHANNELS: readonly ContactChannel[] = [
     href: PROFILE.githubUrl,
   },
   {
-    id: "mslearn",
-    label: "Microsoft Learn",
-    value: "adonaiafewerki-4322",
-    copyValue: "adonaiafewerki-4322",
+    id: "linkedin",
+    label: "LinkedIn",
+    value: "in/adonaiafewerki",
+    copyValue: PROFILE.linkedinUrl,
+    href: PROFILE.linkedinUrl,
   },
   {
     id: "certs",

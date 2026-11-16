@@ -29,7 +29,7 @@ export function Navbar() {
             <Terminal className="h-3.5 w-3.5" aria-hidden="true" />
           </span>
           <span className="tracking-tight">
-            adonzone<span className="text-cyan-400">.dev</span>
+            adonaiafewerki<span className="text-cyan-400">.me</span>
           </span>
         </a>
 
