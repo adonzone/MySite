@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { CREDENTIALS } from "@/data/credentials";
 import { PROFILE } from "@/data/portfolio";
+import { HeroShader } from "@/components/HeroShader";
 
 interface HeroStat {
   label: string;
@@ -27,10 +28,11 @@ export function Hero() {
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="relative flex min-h-[100svh] items-center bg-[#090D16] bg-engineering-grid"
+      className="relative flex min-h-[100svh] items-center overflow-hidden bg-[#090D16] bg-engineering-grid"
       data-enter=""
     >
-      <div className="wrap py-12 lg:py-16">
+      <HeroShader />
+      <div className="wrap relative z-10 py-12 lg:py-16">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-start">
           <div className="hero-text lg:col-span-7">
             <div className="mb-5 inline-flex items-center gap-2 rounded-md border border-white/10 bg-[#0F172A] px-3 py-1.5 font-mono text-xs text-slate-200">

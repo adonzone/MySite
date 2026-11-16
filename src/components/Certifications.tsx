@@ -33,7 +33,7 @@ export function Certifications() {
 
   const visibleCredentials = useMemo(() => {
     if (activeFilter === "Featured") {
-      return CREDENTIALS.filter((c) => c.featured);
+      return CREDENTIALS.filter((c) => c.featured).slice(0, 6);
     }
     if (activeFilter === "All") {
       return CREDENTIALS;
@@ -41,10 +41,15 @@ export function Certifications() {
     return CREDENTIALS.filter((c) => c.issuer === activeFilter);
   }, [activeFilter]);
 
+  const featuredCount = useMemo(
+    () => Math.min(CREDENTIALS.filter((c) => c.featured).length, 6),
+    []
+  );
+
   return (
     <section
       id="credentials"
-      className="min-h-[100svh] bg-[#090D16] py-20 lg:min-h-[1800px] lg:py-24"
+      className="min-h-[100svh] bg-[#090D16] py-20 lg:py-24"
     >
       <div className="wrap">
         <SectionHeader
@@ -54,23 +59,44 @@ export function Certifications() {
           description="Auditable credentials archived in adonzone/certificates across GPU compute, agentic protocols, cloud infrastructure, and systems security."
         />
 
-        <svg
-          viewBox="0 0 720 56"
-          data-visual="credential-ledger"
-          className="mb-6 hidden h-14 w-full rounded-lg border border-white/10 bg-[#0F172A] px-4 md:block"
-          aria-hidden="true"
+        <div
+          data-visual="app-frame"
+          className="mb-6 overflow-hidden rounded-lg border border-white/10 bg-[#0F172A]"
         >
-          <rect x="20" y="14" width="110" height="28" rx="4" fill="#090D16" stroke="#06b6d4" />
-          <text x="75" y="32" textAnchor="middle" fill="#67e8f9" fontSize="11" fontFamily="monospace">AMD ROCm</text>
-          <rect x="148" y="14" width="120" height="28" rx="4" fill="#090D16" stroke="#334155" />
-          <text x="208" y="32" textAnchor="middle" fill="#e2e8f0" fontSize="11" fontFamily="monospace">ANTHROPIC MCP</text>
-          <rect x="286" y="14" width="110" height="28" rx="4" fill="#090D16" stroke="#334155" />
-          <text x="341" y="32" textAnchor="middle" fill="#e2e8f0" fontSize="11" fontFamily="monospace">AWS · CISCO</text>
-          <rect x="414" y="14" width="126" height="28" rx="4" fill="#090D16" stroke="#334155" />
-          <text x="477" y="32" textAnchor="middle" fill="#e2e8f0" fontSize="11" fontFamily="monospace">IBM · HF · KAGGLE</text>
-          <rect x="558" y="14" width="142" height="28" rx="4" fill="#090D16" stroke="#10b981" />
-          <text x="629" y="32" textAnchor="middle" fill="#a7f3d0" fontSize="11" fontFamily="monospace">40 VERIFIED PDFs</text>
-        </svg>
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 bg-[#090D16] px-4 py-2.5 font-mono text-xs">
+            <span className="text-slate-200">
+              LEDGER :: github.com/adonzone/certificates (main)
+            </span>
+            <a
+              href={PROFILE.certificationsRepoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-[44px] scroll-mt-24 items-center gap-2 text-emerald-300 transition-colors hover:text-emerald-200"
+            >
+              <FolderGit2 className="h-4 w-4" aria-hidden="true" />
+              <span>Open Archive ({CREDENTIALS.length} PDFs)</span>
+              <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+            </a>
+          </div>
+          <div className="grid grid-cols-2 gap-3 p-4 font-mono text-xs sm:grid-cols-4">
+            <div className="rounded border border-white/10 bg-[#090D16] px-3 py-2">
+              <div className="text-slate-400">GPU_COMPUTE</div>
+              <div className="mt-0.5 text-cyan-300">AMD ROCm</div>
+            </div>
+            <div className="rounded border border-white/10 bg-[#090D16] px-3 py-2">
+              <div className="text-slate-400">PROTOCOLS</div>
+              <div className="mt-0.5 text-slate-100">Anthropic MCP</div>
+            </div>
+            <div className="rounded border border-white/10 bg-[#090D16] px-3 py-2">
+              <div className="text-slate-400">CLOUD_&_NET</div>
+              <div className="mt-0.5 text-slate-100">AWS · Cisco</div>
+            </div>
+            <div className="rounded border border-white/10 bg-[#090D16] px-3 py-2">
+              <div className="text-slate-400">DEVSECOPS</div>
+              <div className="mt-0.5 text-emerald-300">GitHub · CodeQL</div>
+            </div>
+          </div>
+        </div>
 
         <div className="mb-8 flex flex-col gap-3">
           <div
@@ -89,7 +115,7 @@ export function Certifications() {
                   : "border-white/10 bg-[#0F172A] text-slate-200 hover:border-cyan-500/30 hover:bg-[#1E293B]"
               }`}
             >
-              Featured ({CREDENTIALS.filter((c) => c.featured).length})
+              Featured ({featuredCount})
             </button>
 
             <button
@@ -127,17 +153,6 @@ export function Certifications() {
                 </button>
               );
             })}
-
-            <a
-              href={PROFILE.certificationsRepoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-[44px] scroll-mt-24 shrink-0 items-center gap-2 rounded-md border border-white/10 bg-[#0F172A] px-3.5 py-1.5 font-mono text-xs text-slate-200 transition-colors hover:border-emerald-500/30 hover:bg-[#1E293B] hover:text-emerald-300"
-            >
-              <FolderGit2 className="h-4 w-4 text-emerald-400" aria-hidden="true" />
-              <span>adonzone/certificates</span>
-              <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-            </a>
           </div>
         </div>
 

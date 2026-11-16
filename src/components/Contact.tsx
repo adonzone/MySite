@@ -12,24 +12,103 @@ interface ContactFormState {
   message: string;
 }
 
+type ContactFormErrors = Partial<Record<keyof ContactFormState, string>>;
+
+interface SubmitStatus {
+  kind: "success" | "error";
+  text: string;
+}
+
 const INITIAL_FORM_STATE: ContactFormState = {
   name: "",
   email: "",
   message: "",
 };
 
+const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
+
+function validateForm(values: ContactFormState): ContactFormErrors {
+  const errors: ContactFormErrors = {};
+  if (!values.name.trim()) {
+    errors.name = "Please enter your name.";
+  }
+  if (!values.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+    errors.email = "Please enter a valid email address.";
+  }
+  if (values.message.trim().length < 10) {
+    errors.message = "Please enter a message of at least 10 characters.";
+  }
+  return errors;
+}
+
 export function Contact() {
   const { copiedKey, copyText } = useCopyToClipboard();
   const [formState, setFormState] = useState<ContactFormState>(INITIAL_FORM_STATE);
-  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<ContactFormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<SubmitStatus | null>(null);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!formState.name.trim() || !formState.email.trim() || !formState.message.trim()) {
+    setStatus(null);
+
+    const validationErrors = validateForm(formState);
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) {
       return;
     }
-    setSubmitted(true);
-    setFormState(INITIAL_FORM_STATE);
+
+    if (!WEB3FORMS_KEY) {
+      const subject = encodeURIComponent(
+        `Portfolio Inquiry from ${formState.name.trim()}`
+      );
+      const body = encodeURIComponent(
+        `From: ${formState.name.trim()} <${formState.email.trim()}>\n\n${formState.message.trim()}`
+      );
+      window.location.href = `mailto:${PROFILE.email}?subject=${subject}&body=${body}`;
+      setStatus({
+        kind: "success",
+        text: `Opened your email client addressed to ${PROFILE.email}.`,
+      });
+      setFormState(INITIAL_FORM_STATE);
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `Portfolio Inquiry from ${formState.name.trim()}`,
+          from_name: formState.name.trim(),
+          email: formState.email.trim(),
+          message: formState.message.trim(),
+        }),
+      });
+
+      const payload = (await response.json()) as { success?: boolean; message?: string };
+      if (!response.ok || !payload.success) {
+        throw new Error(payload.message ?? "Unable to send message.");
+      }
+
+      setStatus({
+        kind: "success",
+        text: `Message delivered to ${PROFILE.email}.`,
+      });
+      setFormState(INITIAL_FORM_STATE);
+    } catch {
+      setStatus({
+        kind: "error",
+        text: `Delivery failed. Please email ${PROFILE.email} directly.`,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -116,49 +195,36 @@ export function Contact() {
           </div>
 
           <form
+            noValidate
             onSubmit={handleSubmit}
             className="rounded-lg border border-white/10 bg-[#0F172A] p-6 lg:col-span-7"
           >
-            <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
-              <h3 className="text-base font-semibold text-white">
-                Send a Direct Message
-              </h3>
-              <span className="font-mono text-xs text-slate-300">
-                TLS / DIRECT_DISPATCH
+            <div
+              data-visual="dispatch-frame"
+              className="mb-4 flex items-center justify-between rounded border border-white/10 bg-[#090D16] px-3.5 py-2.5 font-mono text-xs"
+            >
+              <span className="font-semibold text-white">Send a Direct Message</span>
+              <span className="text-emerald-300">
+                {WEB3FORMS_KEY ? "TLS / WEB3FORMS" : "MAILTO DISPATCH"}
               </span>
             </div>
 
-            <svg
-              viewBox="0 0 420 56"
-              data-visual="dispatch-channel"
-              className="mb-4 h-14 w-full rounded border border-white/10 bg-[#090D16] px-3"
-              aria-hidden="true"
-            >
-              <line x1="108" y1="28" x2="180" y2="28" stroke="#06b6d4" strokeWidth="1.5" strokeDasharray="4 3" />
-              <line x1="250" y1="28" x2="312" y2="28" stroke="#10b981" strokeWidth="1.5" />
-              <rect x="16" y="14" width="92" height="28" rx="4" fill="#0F172A" stroke="#334155" />
-              <text x="62" y="32" textAnchor="middle" fill="#cbd5e1" fontSize="10" fontFamily="monospace">CLIENT</text>
-              <rect x="180" y="14" width="70" height="28" rx="4" fill="#0F172A" stroke="#06b6d4" />
-              <text x="215" y="32" textAnchor="middle" fill="#f8fafc" fontSize="10" fontFamily="monospace">TLS 1.3</text>
-              <rect x="312" y="14" width="92" height="28" rx="4" fill="#0F172A" stroke="#10b981" />
-              <text x="358" y="32" textAnchor="middle" fill="#a7f3d0" fontSize="10" fontFamily="monospace">INBOX</text>
-            </svg>
-
-            {submitted ? (
+            {status ? (
               <div
                 role="status"
-                className="mb-4 flex items-center justify-between gap-3 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200"
+                className={`mb-4 flex items-center justify-between gap-3 rounded-md border px-4 py-3 text-sm ${
+                  status.kind === "success"
+                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200"
+                    : "border-rose-500/30 bg-rose-500/10 text-rose-200"
+                }`}
               >
-                <span>
-                  Message staged. For immediate response, email{" "}
-                  <span className="font-mono text-emerald-300">{PROFILE.email}</span>.
-                </span>
+                <span>{status.text}</span>
                 <button
                   type="button"
-                  onClick={() => setSubmitted(false)}
-                  className="min-h-[44px] shrink-0 font-mono text-xs text-emerald-300 underline underline-offset-4 hover:text-emerald-200"
+                  onClick={() => setStatus(null)}
+                  className="min-h-[44px] shrink-0 font-mono text-xs underline underline-offset-4"
                 >
-                  Reset
+                  Dismiss
                 </button>
               </div>
             ) : null}
@@ -176,13 +242,21 @@ export function Contact() {
                   name="name"
                   type="text"
                   required
+                  aria-invalid={Boolean(errors.name)}
+                  aria-describedby={errors.name ? "contact-name-error" : undefined}
                   value={formState.name}
-                  onChange={(e) =>
-                    setFormState((prev) => ({ ...prev, name: e.target.value }))
-                  }
+                  onChange={(e) => {
+                    setFormState((prev) => ({ ...prev, name: e.target.value }));
+                    if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
+                  }}
                   placeholder="Ada Lovelace"
                   className="min-h-[44px] w-full rounded-md border border-white/15 bg-[#090D16] px-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-cyan-500"
                 />
+                {errors.name ? (
+                  <p id="contact-name-error" className="mt-1 font-mono text-xs text-rose-300">
+                    {errors.name}
+                  </p>
+                ) : null}
               </div>
 
               <div>
@@ -197,13 +271,21 @@ export function Contact() {
                   name="email"
                   type="email"
                   required
+                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby={errors.email ? "contact-email-error" : undefined}
                   value={formState.email}
-                  onChange={(e) =>
-                    setFormState((prev) => ({ ...prev, email: e.target.value }))
-                  }
+                  onChange={(e) => {
+                    setFormState((prev) => ({ ...prev, email: e.target.value }));
+                    if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
+                  }}
                   placeholder="ada@analytical.example"
                   className="min-h-[44px] w-full rounded-md border border-white/15 bg-[#090D16] px-3.5 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-cyan-500"
                 />
+                {errors.email ? (
+                  <p id="contact-email-error" className="mt-1 font-mono text-xs text-rose-300">
+                    {errors.email}
+                  </p>
+                ) : null}
               </div>
             </div>
 
@@ -219,22 +301,31 @@ export function Contact() {
                 name="message"
                 rows={4}
                 required
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={errors.message ? "contact-message-error" : undefined}
                 value={formState.message}
-                onChange={(e) =>
-                  setFormState((prev) => ({ ...prev, message: e.target.value }))
-                }
+                onChange={(e) => {
+                  setFormState((prev) => ({ ...prev, message: e.target.value }));
+                  if (errors.message) setErrors((prev) => ({ ...prev, message: undefined }));
+                }}
                 placeholder="Project scope, systems requirements, or role details..."
                 className="w-full rounded-md border border-white/15 bg-[#090D16] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-400 focus:border-cyan-500"
               />
+              {errors.message ? (
+                <p id="contact-message-error" className="mt-1 font-mono text-xs text-rose-300">
+                  {errors.message}
+                </p>
+              ) : null}
             </div>
 
             <div className="mt-5 flex justify-end">
               <button
                 type="submit"
-                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-all hover:-translate-y-0.5 hover:bg-cyan-400 active:translate-y-px sm:w-auto"
+                disabled={isSubmitting}
+                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-md bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-all hover:-translate-y-0.5 hover:bg-cyan-400 active:translate-y-px disabled:opacity-60 sm:w-auto"
               >
                 <Send className="h-4 w-4" aria-hidden="true" />
-                <span>Transmit Message</span>
+                <span>{isSubmitting ? "Sending..." : "Transmit Message"}</span>
               </button>
             </div>
           </form>

@@ -2,6 +2,24 @@ import { Code2, ExternalLink, GitBranch } from "lucide-react";
 import { PROJECTS } from "@/data/portfolio";
 import { SectionHeader } from "@/components/SectionHeader";
 
+const PROJECT_SNIPPETS: Record<string, readonly string[]> = {
+  "simple-git": [
+    "$ sgit hash-object -w README.md",
+    "blob 9f4d2c8a1e3b... (zlib)",
+    "$ sgit log --graph --oneline",
+  ],
+  "kiwix-vault": [
+    "ZIM_ARCHIVE: archwiki_en_2026.zim",
+    "INDEX_STATE: mounted (air-gapped)",
+    "LATENCY: 4.2ms local loopback",
+  ],
+  "say-tool": [
+    "$ say-tool --device default \\",
+    '  "Build 61e77ec deployed"',
+    "AUDIO_OUT: CoreAudio / ALSA ok",
+  ],
+};
+
 export function Projects() {
   return (
     <section
@@ -37,21 +55,16 @@ export function Projects() {
                   {project.title}
                 </h3>
 
-                <svg
-                  viewBox="0 0 280 56"
-                  data-visual="project-topology"
-                  className="mt-3 h-14 w-full rounded border border-white/10 bg-[#090D16] px-2"
-                  aria-hidden="true"
+                <div
+                  data-visual="project-terminal"
+                  className="mt-3 rounded border border-white/10 bg-[#090D16] p-3 font-mono text-[11px] leading-relaxed text-slate-200"
                 >
-                  <line x1="48" y1="28" x2="108" y2="28" stroke="#06b6d4" strokeWidth="1.5" />
-                  <line x1="172" y1="28" x2="232" y2="28" stroke="#10b981" strokeWidth="1.5" />
-                  <circle cx="34" cy="28" r="6" fill="#0F172A" stroke="#06b6d4" strokeWidth="1.5" />
-                  <rect x="108" y="14" width="64" height="28" rx="4" fill="#0F172A" stroke="#334155" />
-                  <text x="140" y="32" textAnchor="middle" fill="#e2e8f0" fontSize="10" fontFamily="monospace">
-                    {project.tags[0] ?? "CORE"}
-                  </text>
-                  <circle cx="246" cy="28" r="6" fill="#0F172A" stroke="#10b981" strokeWidth="1.5" />
-                </svg>
+                  {(PROJECT_SNIPPETS[project.id] ?? ["$ status: active"]).map((line) => (
+                    <div key={line} className="truncate">
+                      {line}
+                    </div>
+                  ))}
+                </div>
 
                 <p className="mt-3 text-sm leading-relaxed text-slate-200">
                   {project.summary}

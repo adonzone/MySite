@@ -37,6 +37,7 @@ jobs:
       - name: Build static export
         env:
           PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_WEB3FORMS_KEY: ${{ vars.NEXT_PUBLIC_WEB3FORMS_KEY }}
         run: npm run build
 
       - name: Upload artifact

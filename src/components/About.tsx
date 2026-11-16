@@ -58,21 +58,35 @@ export function About() {
           description="Hands-on execution across real-time robotics, bare-metal Linux operations, and local-first AI tooling."
         />
 
-        <svg
-          viewBox="0 0 720 56"
-          data-visual="architecture-flow"
-          className="mb-8 hidden h-14 w-full rounded-lg border border-white/10 bg-[#0F172A] px-4 md:block"
-          aria-hidden="true"
+        <div
+          data-visual="app-frame"
+          className="mb-8 overflow-hidden rounded-lg border border-white/10 bg-[#0F172A]"
         >
-          <line x1="150" y1="28" x2="290" y2="28" stroke="#06b6d4" strokeWidth="1.5" strokeDasharray="4 3" />
-          <line x1="430" y1="28" x2="570" y2="28" stroke="#10b981" strokeWidth="1.5" />
-          <rect x="20" y="12" width="130" height="32" rx="6" fill="#090D16" stroke="#334155" />
-          <text x="85" y="32" textAnchor="middle" fill="#e2e8f0" fontSize="11" fontFamily="monospace">ROBOTICS / CAN</text>
-          <rect x="290" y="10" width="140" height="36" rx="6" fill="#090D16" stroke="#06b6d4" />
-          <text x="360" y="32" textAnchor="middle" fill="#f8fafc" fontSize="11" fontFamily="monospace">LINUX / ROCm</text>
-          <rect x="570" y="12" width="130" height="32" rx="6" fill="#090D16" stroke="#10b981" />
-          <text x="635" y="32" textAnchor="middle" fill="#a7f3d0" fontSize="11" fontFamily="monospace">EDGE AI / MCP</text>
-        </svg>
+          <div className="flex items-center justify-between border-b border-white/10 bg-[#090D16] px-4 py-2.5 font-mono text-xs">
+            <div className="flex items-center gap-2 text-slate-200">
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" aria-hidden="true" />
+              <span>node01 :: rocm-smi --showuse &amp;&amp; systemctl status edge-mcp</span>
+            </div>
+            <span className="text-emerald-300">ONLINE · 0 FAULTS</span>
+          </div>
+          <div className="grid grid-cols-1 gap-4 p-4 font-mono text-xs sm:grid-cols-3">
+            <div className="rounded border border-white/10 bg-[#090D16] p-3">
+              <div className="text-slate-400">CONTROL_LOOP</div>
+              <div className="mt-1 text-sm font-medium text-cyan-300">20ms deterministic tick</div>
+              <div className="mt-1 text-slate-300">CAN bus telemetry · PID state</div>
+            </div>
+            <div className="rounded border border-white/10 bg-[#090D16] p-3">
+              <div className="text-slate-400">KERNEL_&_GPU</div>
+              <div className="mt-1 text-sm font-medium text-emerald-300">Linux 6.x · AMD ROCm</div>
+              <div className="mt-1 text-slate-300">Bare-metal · Containerized</div>
+            </div>
+            <div className="rounded border border-white/10 bg-[#090D16] p-3">
+              <div className="text-slate-400">LOCAL_INFERENCE</div>
+              <div className="mt-1 text-sm font-medium text-slate-100">MCP Tool Runtime</div>
+              <div className="mt-1 text-slate-300">Air-gapped · Zero cloud lock-in</div>
+            </div>
+          </div>
+        </div>
 
         <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
           {PILLARS.map((pillar) => (
